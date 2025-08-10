@@ -1,5 +1,3 @@
-# vader.github.io
-Dia dos pais
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -92,6 +90,11 @@ Dia dos pais
     <script>
         // Força o autoplay (pode precisar de interação do usuário em alguns navegadores)
         document.addEventListener('click', function() {
+            document.querySelector('audio').play();
+        });
+    </script>
+</body>
+</html>
             document.querySelector('audio').play();
         });
     </script>
