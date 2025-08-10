@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio 1: O Pesadelo do Banqueiro</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #121212;
+            color: #e0e0e0;
+            text-align: center;
+            padding: 50px;
+            background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #f8d347;
+            text-shadow: 0 0 5px #f8d347;
+        }
+        .binary {
+            font-size: 18px;
+            letter-spacing: 3px;
+            margin: 30px 0;
+            background-color: #000;
+            padding: 15px;
+            border-left: 3px solid #f8d347;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #f8d347;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #f8d347;
+            color: #121212;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #ffdf60;
+        }
+        #next-btn {
+            display: none;
+            background-color: #4CAF50;
+            margin-top: 30px;
+        }
+        #next-btn:hover {
+            background-color: #66BB6A;
+        }
+        .hint {
+            font-style: italic;
+            color: #aaa;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Desafio 1</h1>
+        <p>Decifre a mensagem abaixo para descobrir a pergunta:</p>
+        
+        <div class="binary">
+            01010111 01110001 01110101 01100001 01101100 00100000 01100110 01101111 01101001 00100000 01101111 00100000 01101101 01100001 01101001 01101111 01110010 00100000 01110000 01100101 01110011 01100001 01100100 01100101 01101100 01101111 00100000 01100100 01101111 00100000 01100010 01100001 01101110 01110001 01110101 01100101 01101001 01110010 01101111 00111111
+        </div>
+        
+        <p>Insira a resposta:</p>
+        <input type="text" id="answer" placeholder="Sua resposta...">
+        <button onclick="checkAnswer()">Verificar</button>
+        
+        <p id="feedback" style="min-height: 20px; margin-top: 15px;"></p>
+        
+        <button id="next-btn" onclick="nextChallenge()">Próximo Desafio →</button>
+        
+        <p class="hint">Dica: Não tem dica, use a cabeça!.</p>
+    </div>
+
+    <script>
+        function checkAnswer() {
+            const answer = document.getElementById("answer").value.trim().toUpperCase();
+            const feedback = document.getElementById("feedback");
+            
+            if (answer.includes("WALL STREET")) {
+                feedback.innerHTML = "✅ Correto! O primeiro caractere da senha é: <strong>V</strong>";
+                feedback.style.color = "#4CAF50";
+                document.getElementById("next-btn").style.display = "inline-block";
+            } else {
+                feedback.innerHTML = "❌ Quase lá... Todo evento tem um <em>local</em> inicial.";
+                feedback.style.color = "#f44336";
+            }
+        }
+        
+        function nextChallenge() {
+            // Substitua pela URL do próximo desafio
+            window.location.href = "desafio2.html";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio 2: Você conseguiu chegar aqui? Hehe, legal!</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #121212;
+            color: #e0e0e0;
+            text-align: center;
+            padding: 50px;
+            background-image: url('https://la.psu.edu/wp-content/uploads/sites/2/elementor/thumbs/Italian-BA-q18n11050esnlrwpdki6tsz8x1soghpbqluz74exps.jpeg');
+            background-size: cover;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid #2ecc71;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2ecc71;
+            text-shadow: 0 0 5px #2ecc71;
+        }
+        .cipher {
+            font-size: 20px;
+            letter-spacing: 2px;
+            margin: 30px 0;
+            background-color: #000;
+            padding: 15px;
+            border-left: 3px solid #2ecc71;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #2ecc71;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2ecc71;
+            color: #121212;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        #next-btn {
+            display: none;
+            background-color: #3498db;
+            margin-top: 30px;
+        }
+        #next-btn:hover {
+            background-color: #2980b9;
+        }
+        .hint {
+            font-style: italic;
+            color: #aaa;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        img {
+            max-width: 300px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border: 2px solid #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Desafio 2</h1>
+        <p>Decifre a mensagem abaixo usando uma cifra. Procure por um certo ditador romano. (deslocamento de 3 letras):</p>
+        
+        <div class="cipher">
+            Ixvlfdgr
+        </div>
+        
+        <p>Insira o nome da cidade decifrada:</p>
+        <input type="text" id="city" placeholder="Nome da cidade...">
+        <button onclick="checkCity()">Verificar</button>
+        
+        <p id="feedback" style="min-height: 20px; margin-top: 15px;"></p>
+        
+        <div id="reveal" style="display: none;">
+            <img src="https://lh5.googleusercontent.com/proxy/nJ2kWj_1khq2Ru9JepMsxt_EmqbMa_tsMYt0I44KRFvd_Al1wffJTW7XaPPdAc3xte7dwqNA-l0-LMQfDp6eEx0uNanb51gsEGpXaM5dPpmpUk7EBCr2MU0j" alt="Fuscaldo, Itália">
+            <input type="text" id="name" placeholder="Nome completo...">
+            <button onclick="checkName()">Confirmar</button>
+            <p id="name-feedback" style="min-height: 20px; margin-top: 15px;"></p>
+        </div>
+        
+        <button id="next-btn" onclick="nextChallenge()">Próximo Desafio →</button>
+        
+        <p class="hint">Dica: A → D, B → E, C → F... (cada letra é substituída pela 3ª seguinte no alfabeto).</p>
+    </div>
+
+    <script>
+        function checkCity() {
+            const city = document.getElementById("city").value.trim().toUpperCase();
+            const feedback = document.getElementById("feedback");
+            
+            if (city === "FUSCALDO") {
+                feedback.innerHTML = "✅ Correto! Há algo sobre essa cidade. DESCUBRA...";
+                feedback.style.color = "#2ecc71";
+                document.getElementById("reveal").style.display = "block";
+            } else {
+                feedback.innerHTML = "❌ Não é essa cidade, besta! Procure melhor! Use a dica que você já tem abaixo!";
+                feedback.style.color = "#e74c3c";
+            }
+        }
+        
+        function checkName() {
+            const name = document.getElementById("name").value.trim().toUpperCase();
+            const nameFeedback = document.getElementById("name-feedback");
+            
+            if (name === "LUIGI CERVO") {
+                nameFeedback.innerHTML = "🎉 Verdadeiro Palestrino! O segundo caractere da senha é: <strong>A</strong>";
+                nameFeedback.style.color = "#2ecc71";
+                document.getElementById("next-btn").style.display = "inline-block";
+            } else {
+                nameFeedback.innerHTML = "❌ Nome incorreto. Pesquise sobre a história do Palestra Itália.";
+                nameFeedback.style.color = "#e74c3c";
+            }
+        }
+        
+        function nextChallenge() {
+            window.location.href = "desafio3.html";
+        }
+    </script>
+</body>
+</html>
