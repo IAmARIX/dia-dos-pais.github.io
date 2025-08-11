@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafio 3: O Segredo na URL</title>
+    <title>Desafio 3: O Mosaico de Lembranças</title>
     <style>
         :root {
             --cor-fundo: #121212;
@@ -11,7 +11,6 @@
             --cor-realce: #f39c12; /* Laranja */
             --cor-fundo-transparente: rgba(0, 0, 0, 0.85);
             --cor-sucesso: #2ecc71;
-            --cor-erro: #e74c3c;
         }
 
         body {
@@ -25,10 +24,12 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            background-image: url('https://images.unsplash.com/photo-1605106702734-205df224ecce?ixlib=rb-4.0.3');
+            /* SUBSTITUA a URL abaixo pela imagem que você quer no fundo */
+            background-image: url('https://images.unsplash.com/photo-1582236814271-e0e6b52c0066?q=80&w=1974&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            user-select: none;
         }
         .container {
             background-color: var(--cor-fundo-transparente);
@@ -50,156 +51,205 @@
             line-height: 1.6;
             margin: 15px 0;
         }
-        .cipher {
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            margin: 30px 0;
-            background-color: var(--cor-fundo);
-            padding: 15px;
-            border-left: 5px solid var(--cor-realce);
-            word-wrap: break-word;
+        #puzzle-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 5px;
+            width: 300px;
+            height: 300px;
+            margin: 30px auto;
+            border: 5px solid var(--cor-realce);
         }
-        input {
-            padding: 12px;
-            font-size: 1rem;
-            width: 100%;
-            max-width: 350px;
-            background-color: #222;
-            color: var(--cor-texto);
-            border: 1px solid var(--cor-realce);
-            border-radius: 5px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
+        .puzzle-piece {
+            width: 100px;
+            height: 100px;
+            background-size: 300px 300px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            position: relative;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
-        button {
+        .puzzle-piece.dragging {
+            opacity: 0.7;
+            z-index: 1000;
+        }
+        .puzzle-piece.correct {
+            border: 2px solid var(--cor-sucesso);
+        }
+        #final-message {
+            display: none;
+            margin-top: 30px;
+        }
+        .btn {
+            display: inline-block;
             padding: 12px 25px;
             font-size: 1rem;
-            background-color: var(--cor-realce);
+            background-color: var(--cor-sucesso);
             color: var(--cor-fundo);
-            border: none;
+            text-decoration: none;
             border-radius: 5px;
-            cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 20px;
         }
-        button:hover {
-            background-color: #e67e22;
+        .btn:hover {
+            background-color: #27ae60;
             transform: scale(1.05);
-        }
-        .feedback {
-            min-height: 20px;
-            margin: 15px auto;
-            font-size: 1rem;
-            font-weight: bold;
-        }
-        #url-hint {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 5px;
-            margin: 20px auto;
-            max-width: 500px;
-            display: none;
-            text-align: left;
-            border: 1px dashed var(--cor-realce);
-        }
-        #final-step {
-            display: none;
         }
         /* Media query para telas menores */
         @media (max-width: 600px) {
             .container { padding: 20px; }
             h1 { font-size: 2rem; }
-            p, .cipher, input, button { font-size: 0.9rem; }
-            .cipher { font-size: 1.2rem; }
-            input { max-width: 100%; }
+            p { font-size: 1rem; }
+            #puzzle-container {
+                width: 270px;
+                height: 270px;
+            }
+            .puzzle-piece {
+                width: 90px;
+                height: 90px;
+                background-size: 270px 270px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Desafio 3: O Segredo na URL</h1>
-        <p>Decifre a mensagem abaixo usando a Cifra de César (deslocamento de 5 letras):</p>
-        
-        <div class="cipher">
-            Uwthzqj fqjf
-        </div>
-        
-        <p>Insira a mensagem decifrada:</p>
-        <input type="text" id="decrypted" placeholder="Sua resposta...">
-        <button onclick="checkDecrypted()">Verificar</button>
-        
-        <p id="feedback" class="feedback"></p>
+        <h1>Desafio 3: O Mosaico de Lembranças</h1>
+        <p>Arrume as peças para revelar uma imagem especial da nossa família!</p>
 
-        <div id="url-hint">
-            </div>
+        <div id="puzzle-container"></div>
 
-        <div id="final-step">
-            <p>Agora, insira o nome do condomínio associado a esse endereço:</p>
-            <input type="text" id="condominio" placeholder="Nome do condomínio...">
-            <button onclick="checkCondominio()">Confirmar</button>
-            <p id="condo-feedback" class="feedback"></p>
+        <p id="message"></p>
+
+        <div id="final-message">
+            <p>🎉 Parabéns, pai! Você conseguiu! O terceiro caractere da senha é: <strong>D</strong></p>
+            <a href="desafio4.html" class="btn">Próximo Desafio →</a>
         </div>
     </div>
 
     <script>
-        // Função para verificar a mensagem decifrada
-        function checkDecrypted() {
-            const answer = document.getElementById("decrypted").value.trim().toLowerCase();
-            const feedback = document.getElementById("feedback");
-            
-            if (answer === "procure acima") {
-                feedback.innerHTML = "✅ Correto! Agora, analise a URL desta página...";
-                feedback.style.color = "var(--cor-sucesso)";
-                
-                // Lê o parâmetro 'dica' da URL (ex: ?dica=almirante-938)
-                const urlParams = new URLSearchParams(window.location.search);
-                const dica = urlParams.get('dica');
-                
-                if (dica) {
-                    // Mostra a dica na div #url-hint
-                    document.getElementById("url-hint").innerHTML = `
-                        <p>🔍 A URL contém uma pista: <strong>${dica}</strong></p>
-                        <p>Pesquise esse endereço para continuar!</p>
-                    `;
-                    document.getElementById("url-hint").style.display = "block";
-                    document.getElementById("final-step").style.display = "block";
-                } else {
-                    feedback.innerHTML += "<br>⚠️ Para continuar, o próximo desafio precisa de um link especial. Volte ao desafio anterior!";
-                }
-            } else {
-                feedback.innerHTML = "❌ Use a Cifra de César (deslocamento +5).";
-                feedback.style.color = "var(--cor-erro)";
-                document.getElementById("url-hint").style.display = "none";
-                document.getElementById("final-step").style.display = "none";
+        const container = document.getElementById('puzzle-container');
+        const pieces = [];
+        const imageUrl = 'https://cdnuso.com/24445/2023/07/95244583a35cb6b7cefc4cee00b72215.jpg'; // SUBSTITUA esta URL pela da foto do seu condomínio!
+        const rows = 3;
+        const cols = 3;
+
+        let draggingPiece = null;
+        let startX, startY;
+        let startContainerLeft, startContainerTop;
+
+        function createPieces() {
+            for (let i = 0; i < rows * cols; i++) {
+                const piece = document.createElement('div');
+                piece.classList.add('puzzle-piece');
+                piece.style.backgroundImage = `url(${imageUrl})`;
+                const x = (i % cols) * 100;
+                const y = Math.floor(i / cols) * 100;
+                piece.style.backgroundPosition = `-${x}px -${y}px`;
+                piece.dataset.index = i;
+                pieces.push(piece);
             }
         }
 
-        // Função para verificar o condomínio
-        function checkCondominio() {
-            const condo = document.getElementById("condominio").value.trim().toUpperCase();
-            const feedback = document.getElementById("condo-feedback");
-            
-            if (condo === "GLAUCIA FONSECA") {
-                feedback.innerHTML = "🎉 Correto! O terceiro caractere da senha é: <strong>D</strong>";
-                feedback.style.color = "var(--cor-sucesso)";
-            } else {
-                feedback.innerHTML = "❌ Pesquise o endereço 'Almirante Barroso, 938'.";
-                feedback.style.color = "var(--cor-erro)";
+        function shufflePieces() {
+            for (let i = pieces.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pieces[i], pieces[j]] = [pieces[j], pieces[i]];
             }
         }
 
-        // Oculta o conteúdo sensível no início
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const dica = urlParams.get('dica');
+        function renderPieces() {
+            container.innerHTML = '';
+            pieces.forEach(piece => container.appendChild(piece));
+        }
 
-            if (!dica) {
-                document.getElementById("url-hint").style.display = "none";
-                document.getElementById("final-step").style.display = "none";
+        function getPieceIndex(target) {
+            const children = Array.from(container.children);
+            return children.indexOf(target);
+        }
+
+        function swapPieces(index1, index2) {
+            if (index1 < 0 || index1 >= pieces.length || index2 < 0 || index2 >= pieces.length) return;
+            [pieces[index1], pieces[index2]] = [pieces[index2], pieces[index1]];
+            renderPieces();
+            checkWin();
+        }
+
+        function checkWin() {
+            const isSolved = pieces.every((piece, index) => parseInt(piece.dataset.index) === index);
+            if (isSolved) {
+                document.getElementById('message').innerText = "Parabéns! Mosaico Completo!";
+                document.getElementById('message').style.color = 'var(--cor-sucesso)';
+                document.getElementById('final-message').style.display = 'block';
+                pieces.forEach(piece => piece.classList.add('correct'));
+            } else {
+                document.getElementById('message').innerText = "";
+                document.getElementById('final-message').style.display = 'none';
+                pieces.forEach(piece => piece.classList.remove('correct'));
             }
-        });
+        }
 
+        function handleStart(event) {
+            event.preventDefault();
+            const target = event.target;
+            if (!target.classList.contains('puzzle-piece')) return;
+            
+            draggingPiece = target;
+            draggingPiece.classList.add('dragging');
+            
+            const clientX = event.clientX || event.touches[0].clientX;
+            const clientY = event.clientY || event.touches[0].clientY;
+            startX = clientX;
+            startY = clientY;
+            
+            const rect = container.getBoundingClientRect();
+            startContainerLeft = rect.left;
+            startContainerTop = rect.top;
+        }
+
+        function handleMove(event) {
+            if (!draggingPiece) return;
+            event.preventDefault();
+            
+            const clientX = event.clientX || event.touches[0].clientX;
+            const clientY = event.clientY || event.touches[0].clientY;
+            
+            const deltaX = clientX - startX;
+            const deltaY = clientY - startY;
+
+            draggingPiece.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        }
+
+        function handleEnd(event) {
+            if (!draggingPiece) return;
+            
+            const clientX = event.clientX || event.changedTouches[0].clientX;
+            const clientY = event.clientY || event.changedTouches[0].clientY;
+            
+            const targetIndex = getPieceIndex(draggingPiece);
+            const dropIndex = Math.floor((clientY - startContainerTop) / 100) * 3 + Math.floor((clientX - startContainerLeft) / 100);
+            
+            swapPieces(targetIndex, dropIndex);
+            
+            draggingPiece.style.transform = '';
+            draggingPiece.classList.remove('dragging');
+            draggingPiece = null;
+        }
+        
+        createPieces();
+        shufflePieces();
+        renderPieces();
+
+        container.addEventListener('mousedown', handleStart);
+        container.addEventListener('mousemove', handleMove);
+        container.addEventListener('mouseup', handleEnd);
+        container.addEventListener('mouseleave', handleEnd);
+
+        container.addEventListener('touchstart', handleStart);
+        container.addEventListener('touchmove', handleMove);
+        container.addEventListener('touchend', handleEnd);
     </script>
 </body>
 </html>
