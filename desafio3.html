@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio 3: O Segredo na URL</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #121212;
+            color: #e0e0e0;
+            text-align: center;
+            padding: 50px;
+            background-image: url('https://images.unsplash.com/photo-1605106702734-205df224ecce?ixlib=rb-4.0.3');
+            background-size: cover;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid #f39c12;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .cipher {
+            font-size: 20px;
+            letter-spacing: 2px;
+            margin: 30px 0;
+            background-color: #000;
+            padding: 15px;
+            border-left: 3px solid #f39c12;
+        }
+        #url-hint {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px auto;
+            max-width: 500px;
+            display: none; /* Escondido até ser ativado */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Desafio 3: O Segredo na URL</h1>
+        <p>Decifre a mensagem abaixo usando a Cifra de César (deslocamento de 5 letras):</p>
+        
+        <div class="cipher">
+            Uwthzqj fqjf
+        </div>
+        
+        <p>Insira a mensagem decifrada:</p>
+        <input type="text" id="decrypted" placeholder="Sua resposta...">
+        <button onclick="checkDecrypted()">Verificar</button>
+        
+        <div id="url-hint">
+            <!-- Aqui aparecerá a dica da URL quando ativada -->
+        </div>
+
+        <div id="final-step" style="display: none;">
+            <p>Agora, insira o nome do condomínio associado a esse endereço:</p>
+            <input type="text" id="condominio" placeholder="Nome do condomínio...">
+            <button onclick="checkCondominio()">Confirmar</button>
+            <p id="condo-feedback"></p>
+        </div>
+    </div>
+
+    <!-- ✅ JavaScript que lê a URL -->
+    <script>
+        // Função para verificar a mensagem decifrada
+        function checkDecrypted() {
+            const answer = document.getElementById("decrypted").value.trim().toLowerCase();
+            const feedback = document.getElementById("feedback");
+            
+            if (answer === "procure acima") {
+                feedback.innerHTML = "✅ Correto! Agora, analise a URL desta página...";
+                feedback.style.color = "#2ecc71";
+                
+                // Lê o parâmetro 'dica' da URL (ex: ?dica=almirante-938)
+                const urlParams = new URLSearchParams(window.location.search);
+                const dica = urlParams.get('dica');
+                
+                if (dica) {
+                    // Mostra a dica na div #url-hint
+                    document.getElementById("url-hint").innerHTML = `
+                        <p>🔍 A URL contém uma pista: <strong>${dica}</strong></p>
+                        <p>Pesquise esse endereço para continuar!</p>
+                    `;
+                    document.getElementById("url-hint").style.display = "block";
+                    document.getElementById("final-step").style.display = "block";
+                } else {
+                    feedback.innerHTML += "<br>⚠️ Acesse esta página com <code>?dica=almirante-938</code> na URL.";
+                }
+            } else {
+                feedback.innerHTML = "❌ Use a Cifra de César (deslocamento +5).";
+                feedback.style.color = "#e74c3c";
+            }
+        }
+
+        // Função para verificar o condomínio
+        function checkCondominio() {
+            const condo = document.getElementById("condominio").value.trim().toUpperCase();
+            const feedback = document.getElementById("condo-feedback");
+            
+            if (condo === "GLAUCIA FONSECA") {
+                feedback.innerHTML = "🎉 Correto! O terceiro caractere da senha é: <strong>D</strong>";
+                feedback.style.color = "#2ecc71";
+            } else {
+                feedback.innerHTML = "❌ Pesquise o endereço 'Almirante Barroso, 938'.";
+                feedback.style.color = "#e74c3c";
+            }
+        }
+    </script>
+</body>
+</html>
