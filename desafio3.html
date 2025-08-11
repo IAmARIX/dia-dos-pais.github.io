@@ -5,38 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desafio 3: O Segredo na URL</title>
     <style>
+        :root {
+            --cor-fundo: #121212;
+            --cor-texto: #e0e0e0;
+            --cor-realce: #f39c12; /* Laranja */
+            --cor-fundo-transparente: rgba(0, 0, 0, 0.85);
+            --cor-sucesso: #2ecc71;
+            --cor-erro: #e74c3c;
+        }
+
         body {
             font-family: 'Courier New', monospace;
-            background-color: #121212;
-            color: #e0e0e0;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
             text-align: center;
-            padding: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
             background-image: url('https://images.unsplash.com/photo-1605106702734-205df224ecce?ixlib=rb-4.0.3');
             background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
         .container {
-            background-color: rgba(0, 0, 0, 0.8);
-            border: 1px solid #f39c12;
-            border-radius: 10px;
+            background-color: var(--cor-fundo-transparente);
+            border: 3px solid var(--cor-realce);
+            border-radius: 15px;
             padding: 30px;
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 90%;
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
+            backdrop-filter: blur(5px);
+        }
+        h1 {
+            color: var(--cor-realce);
+            text-shadow: 0 0 10px var(--cor-realce);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 15px 0;
         }
         .cipher {
-            font-size: 20px;
-            letter-spacing: 2px;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
             margin: 30px 0;
-            background-color: #000;
+            background-color: var(--cor-fundo);
             padding: 15px;
-            border-left: 3px solid #f39c12;
+            border-left: 5px solid var(--cor-realce);
+            word-wrap: break-word;
+        }
+        input {
+            padding: 12px;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 350px;
+            background-color: #222;
+            color: var(--cor-texto);
+            border: 1px solid var(--cor-realce);
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            background-color: var(--cor-realce);
+            color: var(--cor-fundo);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #e67e22;
+            transform: scale(1.05);
+        }
+        .feedback {
+            min-height: 20px;
+            margin: 15px auto;
+            font-size: 1rem;
+            font-weight: bold;
         }
         #url-hint {
             background-color: #333;
-            padding: 10px;
+            padding: 20px;
             border-radius: 5px;
             margin: 20px auto;
             max-width: 500px;
-            display: none; /* Escondido até ser ativado */
+            display: none;
+            text-align: left;
+            border: 1px dashed var(--cor-realce);
+        }
+        #final-step {
+            display: none;
+        }
+        /* Media query para telas menores */
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            h1 { font-size: 2rem; }
+            p, .cipher, input, button { font-size: 0.9rem; }
+            .cipher { font-size: 1.2rem; }
+            input { max-width: 100%; }
         }
     </style>
 </head>
@@ -53,19 +129,19 @@
         <input type="text" id="decrypted" placeholder="Sua resposta...">
         <button onclick="checkDecrypted()">Verificar</button>
         
-        <div id="url-hint">
-            <!-- Aqui aparecerá a dica da URL quando ativada -->
-        </div>
+        <p id="feedback" class="feedback"></p>
 
-        <div id="final-step" style="display: none;">
+        <div id="url-hint">
+            </div>
+
+        <div id="final-step">
             <p>Agora, insira o nome do condomínio associado a esse endereço:</p>
             <input type="text" id="condominio" placeholder="Nome do condomínio...">
             <button onclick="checkCondominio()">Confirmar</button>
-            <p id="condo-feedback"></p>
+            <p id="condo-feedback" class="feedback"></p>
         </div>
     </div>
 
-    <!-- ✅ JavaScript que lê a URL -->
     <script>
         // Função para verificar a mensagem decifrada
         function checkDecrypted() {
@@ -74,7 +150,7 @@
             
             if (answer === "procure acima") {
                 feedback.innerHTML = "✅ Correto! Agora, analise a URL desta página...";
-                feedback.style.color = "#2ecc71";
+                feedback.style.color = "var(--cor-sucesso)";
                 
                 // Lê o parâmetro 'dica' da URL (ex: ?dica=almirante-938)
                 const urlParams = new URLSearchParams(window.location.search);
@@ -89,11 +165,13 @@
                     document.getElementById("url-hint").style.display = "block";
                     document.getElementById("final-step").style.display = "block";
                 } else {
-                    feedback.innerHTML += "<br>⚠️ Acesse esta página com <code>?dica=almirante-938</code> na URL.";
+                    feedback.innerHTML += "<br>⚠️ Para continuar, o próximo desafio precisa de um link especial. Volte ao desafio anterior!";
                 }
             } else {
                 feedback.innerHTML = "❌ Use a Cifra de César (deslocamento +5).";
-                feedback.style.color = "#e74c3c";
+                feedback.style.color = "var(--cor-erro)";
+                document.getElementById("url-hint").style.display = "none";
+                document.getElementById("final-step").style.display = "none";
             }
         }
 
@@ -104,12 +182,24 @@
             
             if (condo === "GLAUCIA FONSECA") {
                 feedback.innerHTML = "🎉 Correto! O terceiro caractere da senha é: <strong>D</strong>";
-                feedback.style.color = "#2ecc71";
+                feedback.style.color = "var(--cor-sucesso)";
             } else {
                 feedback.innerHTML = "❌ Pesquise o endereço 'Almirante Barroso, 938'.";
-                feedback.style.color = "#e74c3c";
+                feedback.style.color = "var(--cor-erro)";
             }
         }
+
+        // Oculta o conteúdo sensível no início
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const dica = urlParams.get('dica');
+
+            if (!dica) {
+                document.getElementById("url-hint").style.display = "none";
+                document.getElementById("final-step").style.display = "none";
+            }
+        });
+
     </script>
 </body>
 </html>
